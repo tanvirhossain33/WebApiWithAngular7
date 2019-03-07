@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { EmployeeService } from 'src/app/shared/employee.service';
+import { Employee } from 'src/app/shared/employee.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee-list',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmployeeListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: EmployeeService, private toastr: ToastrService ) { }
 
   ngOnInit() {
+    this.service.refreshList();
   }
 
+  populateForm(emp: Employee) {
+    this.service.formData = Object.assign({}, emp);
+  }
+
+  onDelete(id: number) {
+    this.service.deleteEmployee(id).subscribe(response => {
+      this.service.refreshList();
+      this.toastr.warning('Deleted successfully', 'EMP. Regiser');
+    });
+  }
 }

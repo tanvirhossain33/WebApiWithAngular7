@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from 'src/app/shared/employee.service';
+import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee',
@@ -8,9 +10,48 @@ import { EmployeeService } from 'src/app/shared/employee.service';
 })
 export class EmployeeComponent implements OnInit {
 
-  constructor(private service: EmployeeService) { }
+  constructor(private service: EmployeeService, private toastr: ToastrService) { }
 
   ngOnInit() {
+    this.resetForm();
   }
 
+  resetForm(form?: NgForm) {
+    if (form != null) {
+      form.resetForm();
+    }
+    this.service.formData = {
+      EmployeeId: null,
+      FullName: '',
+      Position: '',
+      EMPCode: '',
+      Mobile: ''
+    };
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.value.EmployeeId == null) {
+      this.insertRecord(form);
+    } else {
+      this.updateRecord(form);
+    }
+  }
+
+  insertRecord(form: NgForm) {
+    this.service.postEmployee(form.value).subscribe(response => {
+      this.toastr.success('Inserted successfully', 'EMP. Register');
+      this.resetForm(form);
+      this.service.refreshList();
+    });
+  }
+
+  updateRecord(form: NgForm) {
+    if (confirm('Are you sure to delete this record?')) {
+      this.service.putEmployee(form.value).subscribe(response => {
+        this.toastr.info('Updated successfully', 'EMP. Register');
+        this.resetForm(form);
+        this.service.refreshList();
+      });
+    }
+  }
 }
