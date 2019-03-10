@@ -21,9 +21,11 @@ export class EmployeeListComponent implements OnInit {
   }
 
   onDelete(id: number) {
-    this.service.deleteEmployee(id).subscribe(response => {
-      this.service.refreshList();
-      this.toastr.warning('Deleted successfully', 'EMP. Regiser');
-    });
+    if (confirm('Are you sure to delete this record?')) {
+      this.service.deleteEmployee(id).subscribe(response => {
+        this.service.refreshList();
+        this.toastr.warning('Deleted successfully', 'EMP. Regiser');
+      });
+    }
   }
 }

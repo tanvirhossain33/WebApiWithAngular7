@@ -1,5 +1,5 @@
 <form #form="ngForm" (submit)="onSubmit(form)" autocomplete="off">
-    <input type="hidden" name="EmployeeId" #EmployeeId="ngModel" [(ngModel)]="service.formData.EmployeeId">
+    <input *ngIf="service.formData.EmployeeId != null" type="hidden" name="EmployeeId" #EmployeeId="ngModel" [(ngModel)]="service.formData.EmployeeId">
   <div class="form-group">
     <label>FULL NAME</label>
     <input name="FullName" #FullName="ngModel" [(ngModel)]="service.formData.FullName" class="form-control" required>

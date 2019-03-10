@@ -46,12 +46,10 @@ export class EmployeeComponent implements OnInit {
   }
 
   updateRecord(form: NgForm) {
-    if (confirm('Are you sure to delete this record?')) {
-      this.service.putEmployee(form.value).subscribe(response => {
-        this.toastr.info('Updated successfully', 'EMP. Register');
-        this.resetForm(form);
-        this.service.refreshList();
-      });
-    }
+    this.service.putEmployee(form.value).subscribe(response => {
+      this.toastr.info('Updated successfully', 'EMP. Register');
+      this.resetForm(form);
+      this.service.refreshList();
+    });
   }
 }
